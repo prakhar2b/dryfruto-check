@@ -506,6 +506,56 @@ async def get_uploaded_file(filename: str):
     
     return FileResponse(file_path)
 
+# ============== FORM SUBMISSIONS ==============
+
+# Bulk Order Submissions
+@api_router.post("/bulk-orders")
+async def create_bulk_order(submission: BulkOrderSubmission):
+    submission_dict = submission.model_dump()
+    submission_dict["id"] = str(uuid.uuid4())
+    submission_dict["createdAt"] = datetime.now(timezone.utc).isoformat()
+    await db.bulk_orders.insert_one(submission_dict)
+    return {"message": "Bulk order inquiry submitted successfully", "id": submission_dict["id"]}
+
+@api_router.get("/bulk-orders")
+async def get_bulk_orders():
+    orders = await db.bulk_orders.find({}, {"_id": 0}).sort("createdAt", -1).to_list(1000)
+    return orders
+
+@api_router.put("/bulk-orders/{order_id}")
+async def update_bulk_order_status(order_id: str, status: str):
+    await db.bulk_orders.update_one({"id": order_id}, {"$set": {"status": status}})
+    return {"message": "Status updated"}
+
+@api_router.delete("/bulk-orders/{order_id}")
+async def delete_bulk_order(order_id: str):
+    await db.bulk_orders.delete_one({"id": order_id})
+    return {"message": "Deleted"}
+
+# Newsletter Subscriptions
+@api_router.post("/newsletter")
+async def subscribe_newsletter(subscription: NewsletterSubscription):
+    # Check if email already exists
+    existing = await db.newsletter.find_one({"email": subscription.email})
+    if existing:
+        return {"message": "Email already subscribed", "exists": True}
+    
+    sub_dict = subscription.model_dump()
+    sub_dict["id"] = str(uuid.uuid4())
+    sub_dict["createdAt"] = datetime.now(timezone.utc).isoformat()
+    await db.newsletter.insert_one(sub_dict)
+    return {"message": "Successfully subscribed to newsletter", "id": sub_dict["id"]}
+
+@api_router.get("/newsletter")
+async def get_newsletter_subscriptions():
+    subs = await db.newsletter.find({}, {"_id": 0}).sort("createdAt", -1).to_list(1000)
+    return subs
+
+@api_router.delete("/newsletter/{sub_id}")
+async def delete_newsletter_subscription(sub_id: str):
+    await db.newsletter.delete_one({"id": sub_id})
+    return {"message": "Deleted"}
+
 # Include the router in the main app
 app.include_router(api_router)
 
