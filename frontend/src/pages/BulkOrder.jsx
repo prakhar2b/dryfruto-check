@@ -174,12 +174,9 @@ const BulkOrder = () => {
                           required
                         >
                           <option value="">Select Product</option>
-                          <option value="Dry Fruits">Dry Fruits</option>
-                          <option value="Nuts">Nuts</option>
-                          <option value="Seeds">Seeds</option>
-                          <option value="Berries">Berries</option>
-                          <option value="Gift Boxes">Gift Boxes</option>
-                          <option value="Mixed">Mixed Products</option>
+                          {(siteSettings.bulkOrderProductTypes || ['Dry Fruits', 'Nuts', 'Seeds', 'Berries', 'Gift Boxes', 'Mixed Products']).map((type, idx) => (
+                            <option key={idx} value={type}>{type}</option>
+                          ))}
                         </select>
                       </div>
                       <div>
@@ -207,11 +204,11 @@ const BulkOrder = () => {
                     </div>
 
                     {/* Submit Buttons */}
-                    <div className="space-y-3">
+                    <div className="flex flex-col md:flex-row md:items-center md:gap-4 space-y-3 md:space-y-0">
                       <button
                         type="submit"
                         disabled={submitting}
-                        className="w-full bg-amber-500 hover:bg-amber-600 text-white py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-50"
+                        className="flex-1 bg-amber-500 hover:bg-amber-600 text-white py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-50"
                       >
                         {submitting ? (
                           <>
@@ -226,7 +223,8 @@ const BulkOrder = () => {
                         )}
                       </button>
 
-                      <div className="flex items-center gap-4">
+                      <span className="hidden md:block text-sm text-gray-500">or</span>
+                      <div className="flex items-center gap-4 md:hidden">
                         <div className="flex-1 h-px bg-gray-200"></div>
                         <span className="text-sm text-gray-500">or</span>
                         <div className="flex-1 h-px bg-gray-200"></div>
@@ -235,7 +233,7 @@ const BulkOrder = () => {
                       <button
                         type="button"
                         onClick={handleWhatsApp}
-                        className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-colors"
+                        className="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-colors"
                       >
                         <MessageCircle className="w-5 h-5" />
                         Send via WhatsApp
@@ -250,14 +248,14 @@ const BulkOrder = () => {
                 <div className="bg-amber-50 rounded-2xl p-8">
                   <h2 className="text-2xl font-bold text-gray-800 mb-4">Why Choose Us?</h2>
                   <ul className="space-y-3">
-                    {[
+                    {(siteSettings.bulkOrderBenefits || [
                       'Direct sourcing from farms ensures freshness',
                       'Minimum order quantity: 10 kg',
                       'Special rates for orders above 100 kg',
                       'Custom packaging with your branding',
                       'Regular supply contracts available',
                       'Quality testing certificates provided'
-                    ].map((item, index) => (
+                    ]).map((item, index) => (
                       <li key={index} className="flex items-start gap-2">
                         <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
                         <span className="text-gray-700">{item}</span>
