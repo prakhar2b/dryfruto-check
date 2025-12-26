@@ -322,6 +322,64 @@ const ProductForm = ({ item, categories, onSave, onClose }) => {
           />
         </div>
 
+        {/* Price Variants Section */}
+        <div className="md:col-span-2 border rounded-lg p-4 bg-gray-50">
+          <div className="flex items-center justify-between mb-3">
+            <label className="block text-sm font-medium text-gray-700">Price Variants</label>
+            <div className="flex items-center gap-3">
+              <label className="flex items-center gap-2 text-sm">
+                <input
+                  type="checkbox"
+                  checked={useCustomPrices}
+                  onChange={(e) => {
+                    setUseCustomPrices(e.target.checked);
+                    if (e.target.checked && Object.keys(form.priceVariants || {}).length === 0) {
+                      calculateDefaultPrices();
+                    }
+                  }}
+                  className="w-4 h-4 text-amber-500 rounded"
+                />
+                Use custom prices
+              </label>
+              {useCustomPrices && (
+                <button
+                  type="button"
+                  onClick={calculateDefaultPrices}
+                  className="text-xs px-2 py-1 bg-amber-100 text-amber-700 rounded hover:bg-amber-200"
+                >
+                  Auto-calculate from base price
+                </button>
+              )}
+            </div>
+          </div>
+          
+          {useCustomPrices ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              {SIZE_VARIANTS.map((variant) => (
+                <div key={variant.key} className="flex flex-col">
+                  <label className="text-xs text-gray-600 mb-1">{variant.label}</label>
+                  <div className="flex items-center">
+                    <span className="text-gray-500 mr-1">₹</span>
+                    <input
+                      type="number"
+                      value={form.priceVariants?.[variant.key] || ''}
+                      onChange={(e) => updatePriceVariant(variant.key, e.target.value)}
+                      className="w-full px-2 py-1.5 border rounded focus:ring-2 focus:ring-amber-500 outline-none text-sm"
+                      placeholder={Math.round(form.basePrice * variant.multiplier)}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-gray-500">
+              Prices will be auto-calculated using multipliers based on the base price (₹{form.basePrice}/100g).
+              <br />
+              <span className="text-xs">Enable "Use custom prices" to set individual prices for each size.</span>
+            </p>
+          )}
+        </div>
+
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-gray-700 mb-1">Main Image *</label>
           <ImageInput
