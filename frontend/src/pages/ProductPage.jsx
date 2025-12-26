@@ -3,10 +3,20 @@ import { useParams, Link } from 'react-router-dom';
 import { ChevronRight, Phone, MessageCircle, Heart, Truck, Shield, RefreshCcw } from 'lucide-react';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
-import { products, CONTACT_INFO, sizeVariants } from '../data/mock';
+import { useData } from '../context/DataContext';
+
+const sizeVariants = [
+  { label: "100 gram", multiplier: 1 },
+  { label: "250 gram", multiplier: 2.4 },
+  { label: "500 gram", multiplier: 4.5 },
+  { label: "1 kg", multiplier: 8.5 },
+  { label: "2 kg", multiplier: 16 },
+  { label: "5 kg", multiplier: 38 }
+];
 
 const ProductPage = () => {
   const { slug } = useParams();
+  const { products, siteSettings } = useData();
   const [selectedSize, setSelectedSize] = useState(0);
   const [activeTab, setActiveTab] = useState('description');
   const [selectedImage, setSelectedImage] = useState(0);
@@ -27,14 +37,16 @@ const ProductPage = () => {
   }
 
   const currentPrice = Math.round(product.basePrice * sizeVariants[selectedSize].multiplier);
+  const whatsappLink = siteSettings.whatsappLink || `https://wa.me/91${siteSettings.phone}`;
+  const callLink = `tel:+91${siteSettings.phone}`;
 
   const handleWhatsApp = () => {
     const message = `Hi, I'm interested in ${product.name} (${sizeVariants[selectedSize].label}) - ₹${currentPrice}`;
-    window.open(`${CONTACT_INFO.whatsappLink}?text=${encodeURIComponent(message)}`, '_blank');
+    window.open(`${whatsappLink}?text=${encodeURIComponent(message)}`, '_blank');
   };
 
   const handleCall = () => {
-    window.open(CONTACT_INFO.callLink, '_self');
+    window.open(callLink, '_self');
   };
 
   return (
@@ -63,12 +75,12 @@ const ProductPage = () => {
               <div className="p-4 md:p-6 bg-gray-50">
                 <div className="aspect-square rounded-xl overflow-hidden bg-white mb-3">
                   <img
-                    src={product.images[selectedImage] || product.image}
+                    src={product.images?.[selectedImage] || product.image}
                     alt={product.name}
                     className="w-full h-full object-cover"
                   />
                 </div>
-                {product.images.length > 1 && (
+                {product.images && product.images.length > 1 && (
                   <div className="flex gap-2">
                     {product.images.map((img, index) => (
                       <button
@@ -212,7 +224,7 @@ const ProductPage = () => {
                   <div className="max-w-3xl">
                     <h3 className="text-lg font-bold text-gray-800 mb-3">Health Benefits</h3>
                     <ul className="space-y-2">
-                      {product.benefits.map((benefit, index) => (
+                      {product.benefits?.map((benefit, index) => (
                         <li key={index} className="flex items-start gap-2 text-sm">
                           <span className="w-1.5 h-1.5 bg-amber-500 rounded-full mt-2 flex-shrink-0"></span>
                           <span className="text-gray-600">{benefit}</span>
