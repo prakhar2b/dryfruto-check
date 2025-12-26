@@ -140,20 +140,19 @@ const Footer = () => {
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t" style={{ borderColor: footerLink, opacity: 0.3 }}>
+      <div className="border-t border-amber-900/30">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm" style={{ color: footerText, opacity: 0.7 }}>
+            <p className="text-gray-400 text-sm">
               © 2025 {siteSettings.businessName}. All rights reserved.
             </p>
-            <p className="text-sm" style={{ color: footerText, opacity: 0.7 }}>
+            <p className="text-gray-400 text-sm">
               Designed and hosted by{' '}
               <a 
                 href="https://statell.com" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="transition-colors hover:opacity-80"
-                style={{ color: footerLink }}
+                className="text-amber-400 hover:text-amber-300 transition-colors"
               >
                 Statell Marketing
               </a>
