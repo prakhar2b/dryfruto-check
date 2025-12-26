@@ -101,3 +101,86 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+
+user_problem_statement: "On bulk order page, make sure submit and whatsapp both options are on same line in desktop version. Also make these details configurable from admin panel."
+
+backend:
+  - task: "Bulk Order Settings API - Store and retrieve bulkOrderProductTypes and bulkOrderBenefits"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added bulkOrderProductTypes (List[str]) and bulkOrderBenefits (List[str]) fields to SiteSettings and SiteSettingsUpdate models in server.py"
+
+frontend:
+  - task: "Bulk Order Page - Button alignment on desktop"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/BulkOrder.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Updated button container to use flexbox layout - buttons now appear side-by-side on desktop (md:flex md:flex-row) and stacked on mobile. Verified with screenshots."
+
+  - task: "Bulk Order Page - Dynamic Product Types from settings"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/pages/BulkOrder.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Product type dropdown now reads from siteSettings.bulkOrderProductTypes with fallback to default values"
+
+  - task: "Bulk Order Page - Dynamic Why Choose Us benefits from settings"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/pages/BulkOrder.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Why Choose Us section now reads from siteSettings.bulkOrderBenefits with fallback to default values"
+
+  - task: "Admin Settings - Bulk Order Page Settings section"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/pages/admin/SettingsManager.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added new 'Bulk Order Page Settings' section in admin panel with ability to add/remove product types (displayed as tags) and benefits (displayed as list items). Both sections have input fields with Add buttons."
+
+metadata:
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 1
+  run_ui: true
+
+test_plan:
+  current_focus:
+    - "Admin Settings - Bulk Order Page Settings section"
+    - "Bulk Order Settings API - Store and retrieve bulkOrderProductTypes and bulkOrderBenefits"
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
+agent_communication:
+  - agent: "main"
+    message: "Implemented button alignment fix (verified working via screenshots) and configurable bulk order settings. Need to test: 1) Admin panel can save/load bulkOrderProductTypes and bulkOrderBenefits, 2) Changes in admin panel reflect on the Bulk Order page. Test the full flow: add a new product type in admin, save, verify it appears in the dropdown on /bulk-order page."
