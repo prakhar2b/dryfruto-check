@@ -166,6 +166,16 @@ const ProductsManager = () => {
   );
 };
 
+// Size variants configuration
+const SIZE_VARIANTS = [
+  { key: '100g', label: '100 gram', multiplier: 1 },
+  { key: '250g', label: '250 gram', multiplier: 2.4 },
+  { key: '500g', label: '500 gram', multiplier: 4.5 },
+  { key: '1kg', label: '1 kg', multiplier: 8.5 },
+  { key: '2kg', label: '2 kg', multiplier: 16 },
+  { key: '5kg', label: '5 kg', multiplier: 38 }
+];
+
 // Product Form
 const ProductForm = ({ item, categories, onSave, onClose }) => {
   const [form, setForm] = useState(item || {
@@ -180,10 +190,33 @@ const ProductForm = ({ item, categories, onSave, onClose }) => {
     shortDescription: '',
     description: '',
     benefits: [],
-    features: ['Healthy Heart', 'High Nutrition', 'Gluten Free', 'Cholesterol Free']
+    features: ['Healthy Heart', 'High Nutrition', 'Gluten Free', 'Cholesterol Free'],
+    priceVariants: {}
   });
   const [benefitInput, setBenefitInput] = useState('');
   const [imageInput, setImageInput] = useState('');
+  const [useCustomPrices, setUseCustomPrices] = useState(
+    item?.priceVariants && Object.keys(item.priceVariants).length > 0
+  );
+
+  // Auto-calculate prices based on base price
+  const calculateDefaultPrices = () => {
+    const prices = {};
+    SIZE_VARIANTS.forEach(variant => {
+      prices[variant.key] = Math.round(form.basePrice * variant.multiplier);
+    });
+    setForm({ ...form, priceVariants: prices });
+  };
+
+  const updatePriceVariant = (key, value) => {
+    setForm({
+      ...form,
+      priceVariants: {
+        ...form.priceVariants,
+        [key]: parseFloat(value) || 0
+      }
+    });
+  };
 
   const addBenefit = () => {
     if (benefitInput.trim()) {
