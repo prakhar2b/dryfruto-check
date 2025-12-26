@@ -102,12 +102,50 @@ export const DataProvider = ({ children }) => {
         if (settingsRes.data.theme) {
           applyThemeCSS(settingsRes.data.theme);
         }
+        // Apply page-specific CSS styles
+        if (settingsRes.data.pageStyles) {
+          applyPageStyles(settingsRes.data.pageStyles);
+        }
       }
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
     }
+  };
+
+  // Apply page-specific CSS styles
+  const applyPageStyles = (pageStyles) => {
+    const root = document.documentElement;
+    
+    // Apply global styles
+    if (pageStyles.global) {
+      const global = pageStyles.global;
+      root.style.setProperty('--header-bg', global.headerBg);
+      root.style.setProperty('--header-text', global.headerText);
+      root.style.setProperty('--header-nav-hover', global.headerNavHover);
+      root.style.setProperty('--footer-bg', global.footerBg);
+      root.style.setProperty('--footer-text', global.footerText);
+      root.style.setProperty('--footer-link', global.footerLink);
+      root.style.setProperty('--color-primary', global.primaryColor);
+      root.style.setProperty('--color-accent', global.accentColor);
+      root.style.setProperty('--color-accentHover', global.accentHover);
+      root.style.setProperty('--color-text', global.textColor);
+      root.style.setProperty('--color-textLight', global.textLight);
+      root.style.setProperty('--color-background', global.backgroundColor);
+      root.style.setProperty('--card-bg', global.cardBg);
+      root.style.setProperty('--card-border', global.cardBorder);
+      root.style.setProperty('--btn-radius', global.buttonRadius);
+    }
+    
+    // Apply page-specific styles as CSS variables
+    Object.entries(pageStyles).forEach(([page, styles]) => {
+      if (page !== 'global' && styles) {
+        Object.entries(styles).forEach(([key, value]) => {
+          root.style.setProperty(`--${page}-${key}`, value);
+        });
+      }
+    });
   };
 
   // Apply theme CSS variables to document
