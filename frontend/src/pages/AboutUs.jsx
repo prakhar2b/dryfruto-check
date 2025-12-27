@@ -69,10 +69,10 @@ const AboutUs = () => {
       <Header />
       <main>
         {/* Hero Section */}
-        <div className="bg-[#3d2518] text-white py-20">
+        <div className="bg-emerald-600 text-white py-20">
           <div className="max-w-7xl mx-auto px-4 text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">About {siteSettings.businessName}</h1>
-            <p className="text-lg text-amber-200 max-w-2xl mx-auto">
+            <p className="text-lg text-emerald-200 max-w-2xl mx-auto">
               {heroSubtitle}
             </p>
           </div>
@@ -90,7 +90,7 @@ const AboutUs = () => {
                   ))}
                 </div>
               </div>
-              <div className="bg-amber-50 rounded-2xl p-8">
+              <div className="bg-emerald-50 rounded-2xl p-8">
                 <img 
                   src={storyImage} 
                   alt="Premium Dry Fruits" 
@@ -99,7 +99,7 @@ const AboutUs = () => {
                 <div className="grid grid-cols-2 gap-4">
                   {stats.map((stat, index) => (
                     <div key={index} className="text-center">
-                      <div className="text-3xl font-bold text-amber-600">{stat.number}</div>
+                      <div className="text-3xl font-bold text-emerald-600">{stat.number}</div>
                       <div className="text-sm text-gray-600">{stat.label}</div>
                     </div>
                   ))}
@@ -110,13 +110,13 @@ const AboutUs = () => {
         </section>
 
         {/* Vision & Mission */}
-        <section className="py-16 bg-gradient-to-b from-amber-50 to-white">
+        <section className="py-16 bg-gradient-to-b from-emerald-50 to-white">
           <div className="max-w-7xl mx-auto px-4">
             <div className="grid md:grid-cols-2 gap-8">
               {/* Vision */}
               <div className="bg-white rounded-2xl shadow-lg p-8">
-                <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mb-6">
-                  <Eye className="w-8 h-8 text-amber-600" />
+                <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-6">
+                  <Eye className="w-8 h-8 text-emerald-600" />
                 </div>
                 <h2 className="text-2xl font-bold text-gray-800 mb-4">Our Vision</h2>
                 <p className="text-gray-600 leading-relaxed">
@@ -125,7 +125,7 @@ const AboutUs = () => {
                 <ul className="mt-4 space-y-2">
                   {visionPoints.map((point, index) => (
                     <li key={index} className="flex items-center gap-2 text-gray-600">
-                      <span className="w-2 h-2 bg-amber-500 rounded-full"></span>
+                      <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
                       {point}
                     </li>
                   ))}
@@ -134,8 +134,8 @@ const AboutUs = () => {
 
               {/* Mission */}
               <div className="bg-white rounded-2xl shadow-lg p-8">
-                <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mb-6">
-                  <Target className="w-8 h-8 text-amber-600" />
+                <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-6">
+                  <Target className="w-8 h-8 text-emerald-600" />
                 </div>
                 <h2 className="text-2xl font-bold text-gray-800 mb-4">Our Mission</h2>
                 <p className="text-gray-600 leading-relaxed">
@@ -144,7 +144,7 @@ const AboutUs = () => {
                 <ul className="mt-4 space-y-2">
                   {missionPoints.map((point, index) => (
                     <li key={index} className="flex items-center gap-2 text-gray-600">
-                      <span className="w-2 h-2 bg-amber-500 rounded-full"></span>
+                      <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
                       {point}
                     </li>
                   ))}
@@ -161,8 +161,8 @@ const AboutUs = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {values.map((value, index) => (
                 <div key={index} className="text-center">
-                  <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <value.icon className="w-8 h-8 text-amber-600" />
+                  <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <value.icon className="w-8 h-8 text-emerald-600" />
                   </div>
                   <h3 className="font-semibold text-gray-800 mb-2">{value.title}</h3>
                   <p className="text-sm text-gray-600">{value.desc}</p>
@@ -173,17 +173,17 @@ const AboutUs = () => {
         </section>
 
         {/* Why Choose Us */}
-        <section className="py-16 bg-[#3d2518] text-white">
+        <section className="py-16 bg-emerald-600 text-white">
           <div className="max-w-7xl mx-auto px-4">
             <h2 className="text-3xl font-bold text-center mb-12">Why Choose {siteSettings.businessName}?</h2>
             <div className="grid md:grid-cols-3 gap-8">
               {team.map((item, index) => (
                 <div key={index} className="bg-[#4d2f20] rounded-xl p-6">
-                  <div className="w-12 h-12 bg-amber-500 rounded-lg flex items-center justify-center mb-4">
+                  <div className="w-12 h-12 bg-emerald-500 rounded-lg flex items-center justify-center mb-4">
                     <Award className="w-6 h-6 text-white" />
                   </div>
                   <h3 className="text-xl font-semibold mb-2">{item.name}</h3>
-                  <p className="text-amber-200">{item.desc}</p>
+                  <p className="text-emerald-200">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -191,7 +191,7 @@ const AboutUs = () => {
         </section>
 
         {/* Contact CTA */}
-        <section className="py-16 bg-amber-50">
+        <section className="py-16 bg-emerald-50">
           <div className="max-w-3xl mx-auto px-4 text-center">
             <h2 className="text-3xl font-bold text-gray-800 mb-4">Get in Touch</h2>
             <p className="text-gray-600 mb-8">
@@ -200,13 +200,13 @@ const AboutUs = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
                 href={`tel:+91${siteSettings.phone}`}
-                className="bg-[#3d2518] hover:bg-[#2d1810] text-white px-8 py-3 rounded-lg font-semibold transition-colors"
+                className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
               >
                 Call Us: {siteSettings.phone}
               </a>
               <a 
                 href={`mailto:${siteSettings.email}`}
-                className="bg-amber-500 hover:bg-amber-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
+                className="bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
               >
                 Email Us
               </a>

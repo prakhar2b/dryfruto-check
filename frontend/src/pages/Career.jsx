@@ -29,16 +29,16 @@ const Career = () => {
       <Header />
       <main>
         {/* Hero Section */}
-        <div className="bg-[#3d2518] text-white py-16">
+        <div className="bg-emerald-600 text-white py-16">
           <div className="max-w-7xl mx-auto px-4 text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Join Our Team</h1>
-            <p className="text-lg text-amber-200 max-w-2xl mx-auto">
+            <p className="text-lg text-emerald-200 max-w-2xl mx-auto">
               Be a part of our growing family. We're looking for passionate individuals who share our love for quality and customer satisfaction.
             </p>
           </div>
         </div>
 
-        <div className="bg-gradient-to-b from-amber-50 to-white">
+        <div className="bg-gradient-to-b from-emerald-50 to-white">
           <div className="max-w-7xl mx-auto px-4 py-12">
             {/* Why Join Us */}
             <div className="mb-16">
@@ -46,8 +46,8 @@ const Career = () => {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 {benefits.map((benefit, index) => (
                   <div key={index} className="bg-white rounded-xl p-6 shadow-sm text-center">
-                    <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <benefit.icon className="w-6 h-6 text-amber-600" />
+                    <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <benefit.icon className="w-6 h-6 text-emerald-600" />
                     </div>
                     <h3 className="font-semibold text-gray-800 mb-1">{benefit.title}</h3>
                     <p className="text-sm text-gray-600">{benefit.desc}</p>
@@ -59,8 +59,8 @@ const Career = () => {
             {/* Career Opportunities */}
             <div className="max-w-3xl mx-auto">
               <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
-                <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Briefcase className="w-8 h-8 text-amber-600" />
+                <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Briefcase className="w-8 h-8 text-emerald-600" />
                 </div>
                 
                 <h2 className="text-2xl font-bold text-gray-800 mb-4">We're Always Looking for Talent!</h2>
@@ -73,7 +73,7 @@ const Career = () => {
                   <h3 className="font-semibold text-gray-700 mb-3">Departments we hire for:</h3>
                   <div className="flex flex-wrap justify-center gap-2">
                     {departments.map((dept, index) => (
-                      <span key={index} className="bg-amber-50 text-amber-700 px-3 py-1 rounded-full text-sm">
+                      <span key={index} className="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-sm">
                         {dept}
                       </span>
                     ))}
@@ -81,9 +81,9 @@ const Career = () => {
                 </div>
 
                 {/* Call to Action */}
-                <div className="bg-amber-50 rounded-xl p-6">
+                <div className="bg-emerald-50 rounded-xl p-6">
                   <div className="flex items-center justify-center gap-2 mb-3">
-                    <Mail className="w-5 h-5 text-amber-600" />
+                    <Mail className="w-5 h-5 text-emerald-600" />
                     <span className="font-semibold text-gray-800">Send Your Resume</span>
                   </div>
                   <p className="text-gray-600 mb-4">
@@ -91,7 +91,7 @@ const Career = () => {
                   </p>
                   <a
                     href={`mailto:${careerEmail}?subject=Job Application`}
-                    className="inline-flex items-center gap-2 bg-[#3d2518] hover:bg-[#2d1810] text-white px-8 py-3 rounded-lg font-semibold transition-colors"
+                    className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
                   >
                     <Send className="w-5 h-5" />
                     {careerEmail}

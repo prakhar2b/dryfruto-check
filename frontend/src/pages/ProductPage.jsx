@@ -29,7 +29,7 @@ const ProductPage = () => {
         <Header />
         <div className="max-w-7xl mx-auto px-4 py-16 text-center">
           <h1 className="text-2xl font-bold text-gray-800 mb-4">Product not found</h1>
-          <Link to="/products" className="text-amber-600 hover:text-amber-700">Browse all products</Link>
+          <Link to="/products" className="text-emerald-600 hover:text-emerald-700">Browse all products</Link>
         </div>
         <Footer />
       </div>
@@ -59,13 +59,13 @@ const ProductPage = () => {
 
       <main>
         {/* Breadcrumb */}
-        <div className="bg-[#3d2518] py-3">
+        <div className="bg-emerald-600 py-3">
           <div className="max-w-6xl mx-auto px-4">
             <div className="flex items-center gap-2 text-sm">
-              <Link to="/" className="text-amber-200 hover:text-white transition-colors">Home</Link>
-              <ChevronRight className="w-4 h-4 text-amber-400" />
-              <Link to="/products" className="text-amber-200 hover:text-white transition-colors">Products</Link>
-              <ChevronRight className="w-4 h-4 text-amber-400" />
+              <Link to="/" className="text-emerald-200 hover:text-white transition-colors">Home</Link>
+              <ChevronRight className="w-4 h-4 text-emerald-400" />
+              <Link to="/products" className="text-emerald-200 hover:text-white transition-colors">Products</Link>
+              <ChevronRight className="w-4 h-4 text-emerald-400" />
               <span className="text-white">{product.name}</span>
             </div>
           </div>
@@ -91,7 +91,7 @@ const ProductPage = () => {
                         key={index}
                         onClick={() => setSelectedImage(index)}
                         className={`w-16 h-16 rounded-lg overflow-hidden border-2 transition-colors ${
-                          selectedImage === index ? 'border-amber-500' : 'border-gray-200 hover:border-amber-300'
+                          selectedImage === index ? 'border-emerald-500' : 'border-gray-200 hover:border-emerald-300'
                         }`}
                       >
                         <img src={img} alt="" className="w-full h-full object-cover" />
@@ -102,22 +102,22 @@ const ProductPage = () => {
               </div>
 
               {/* Right - Details */}
-              <div className="p-4 md:p-6 bg-[#3d2518] text-white">
+              <div className="p-4 md:p-6 bg-emerald-600 text-white">
                 <h1 className="text-xl md:text-2xl font-bold mb-2">
                   {product.name}
                 </h1>
-                <p className="text-amber-200 text-sm mb-2">{product.shortDescription}</p>
+                <p className="text-emerald-200 text-sm mb-2">{product.shortDescription}</p>
                 
                 {/* SKU */}
                 {product.sku && (
-                  <p className="text-amber-300/70 text-xs mb-4">
-                    SKU: <span className="text-amber-200">{product.sku}</span>
+                  <p className="text-emerald-300/70 text-xs mb-4">
+                    SKU: <span className="text-emerald-200">{product.sku}</span>
                   </p>
                 )}
 
                 {/* Size Variants */}
                 <div className="mb-4">
-                  <p className="font-medium text-amber-300 mb-2 text-sm">Select Size:</p>
+                  <p className="font-medium text-emerald-300 mb-2 text-sm">Select Size:</p>
                   <div className="flex flex-wrap gap-2">
                     {sizeVariants.map((size, index) => (
                       <button
@@ -125,8 +125,8 @@ const ProductPage = () => {
                         onClick={() => setSelectedSize(index)}
                         className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
                           selectedSize === index
-                            ? 'bg-amber-500 text-white'
-                            : 'bg-[#2d1810] text-amber-200 hover:bg-[#4d3528]'
+                            ? 'bg-emerald-500 text-white'
+                            : 'bg-emerald-700 text-emerald-200 hover:bg-[#4d3528]'
                         }`}
                       >
                         {size.label}
@@ -137,45 +137,45 @@ const ProductPage = () => {
 
                 {/* Price */}
                 <div className="mb-4">
-                  <p className="text-3xl font-bold text-amber-400">
+                  <p className="text-3xl font-bold text-emerald-400">
                     ₹{currentPrice}.00
                   </p>
                 </div>
 
                 {/* Delivery Info */}
-                <div className="bg-[#2d1810] rounded-lg p-3 mb-4 border border-amber-900">
-                  <p className="text-sm text-amber-100">
-                    <strong className="text-amber-400">Swift Delivery -</strong> Shipping Across India. 
+                <div className="bg-emerald-700 rounded-lg p-3 mb-4 border border-emerald-900">
+                  <p className="text-sm text-emerald-100">
+                    <strong className="text-emerald-400">Swift Delivery -</strong> Shipping Across India. 
                     Bringing the goodness of dry fruits to your doorstep!
                   </p>
                 </div>
 
                 {/* Health Features Box */}
-                <div className="bg-[#2d1810] rounded-lg p-4 mb-4 border border-amber-900">
+                <div className="bg-emerald-700 rounded-lg p-4 mb-4 border border-emerald-900">
                   <div className="grid grid-cols-2 gap-3">
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 bg-amber-600 rounded-full flex items-center justify-center">
+                      <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center">
                         <Heart className="w-4 h-4 text-white" />
                       </div>
-                      <span className="text-amber-100 text-xs">Healthy Heart</span>
+                      <span className="text-emerald-100 text-xs">Healthy Heart</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 bg-amber-600 rounded-full flex items-center justify-center">
+                      <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center">
                         <Shield className="w-4 h-4 text-white" />
                       </div>
-                      <span className="text-amber-100 text-xs">High Nutrition</span>
+                      <span className="text-emerald-100 text-xs">High Nutrition</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 bg-amber-600 rounded-full flex items-center justify-center">
+                      <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center">
                         <RefreshCcw className="w-4 h-4 text-white" />
                       </div>
-                      <span className="text-amber-100 text-xs">Gluten Free</span>
+                      <span className="text-emerald-100 text-xs">Gluten Free</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 bg-amber-600 rounded-full flex items-center justify-center">
+                      <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center">
                         <Truck className="w-4 h-4 text-white" />
                       </div>
-                      <span className="text-amber-100 text-xs">Cholesterol Free</span>
+                      <span className="text-emerald-100 text-xs">Cholesterol Free</span>
                     </div>
                   </div>
                 </div>
@@ -191,7 +191,7 @@ const ProductPage = () => {
                   </button>
                   <button
                     onClick={handleCall}
-                    className="flex-1 bg-amber-500 hover:bg-amber-600 text-white py-3 px-4 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 text-sm"
+                    className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white py-3 px-4 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 text-sm"
                   >
                     <Phone className="w-5 h-5" />
                     Call Us
@@ -207,7 +207,7 @@ const ProductPage = () => {
                   onClick={() => setActiveTab('description')}
                   className={`flex-1 py-3 text-center font-medium text-sm transition-colors ${
                     activeTab === 'description'
-                      ? 'text-amber-700 border-b-2 border-amber-500 bg-amber-50'
+                      ? 'text-emerald-700 border-b-2 border-emerald-500 bg-emerald-50'
                       : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
                   }`}
                 >
@@ -217,7 +217,7 @@ const ProductPage = () => {
                   onClick={() => setActiveTab('benefits')}
                   className={`flex-1 py-3 text-center font-medium text-sm transition-colors ${
                     activeTab === 'benefits'
-                      ? 'text-amber-700 border-b-2 border-amber-500 bg-amber-50'
+                      ? 'text-emerald-700 border-b-2 border-emerald-500 bg-emerald-50'
                       : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
                   }`}
                 >
@@ -237,7 +237,7 @@ const ProductPage = () => {
                     <ul className="space-y-2">
                       {product.benefits?.map((benefit, index) => (
                         <li key={index} className="flex items-start gap-2 text-sm">
-                          <span className="w-1.5 h-1.5 bg-amber-500 rounded-full mt-2 flex-shrink-0"></span>
+                          <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full mt-2 flex-shrink-0"></span>
                           <span className="text-gray-600">{benefit}</span>
                         </li>
                       ))}
