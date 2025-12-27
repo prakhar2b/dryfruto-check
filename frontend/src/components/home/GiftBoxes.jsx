@@ -35,7 +35,7 @@ const GiftBoxes = () => {
           </div>
           <Link 
             to="/products?category=gift-boxes" 
-            className="mt-4 md:mt-0 inline-flex items-center gap-2 text-amber-700 hover:text-amber-800 font-semibold transition-colors"
+            className="mt-4 md:mt-0 inline-flex items-center gap-2 text-emerald-700 hover:text-emerald-800 font-semibold transition-colors"
           >
             View More
             <ChevronRight className="w-5 h-5" />
@@ -46,13 +46,13 @@ const GiftBoxes = () => {
           {/* Scroll Buttons */}
           <button
             onClick={() => scroll('left')}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 bg-white shadow-lg rounded-full flex items-center justify-center text-gray-700 hover:bg-amber-50 transition-colors hidden md:flex"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 bg-white shadow-lg rounded-full flex items-center justify-center text-gray-700 hover:bg-emerald-50 transition-colors hidden md:flex"
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
           <button
             onClick={() => scroll('right')}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-12 h-12 bg-white shadow-lg rounded-full flex items-center justify-center text-gray-700 hover:bg-amber-50 transition-colors hidden md:flex"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-12 h-12 bg-white shadow-lg rounded-full flex items-center justify-center text-gray-700 hover:bg-emerald-50 transition-colors hidden md:flex"
           >
             <ChevronRight className="w-6 h-6" />
           </button>
@@ -79,7 +79,7 @@ const GiftBoxes = () => {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <div className="absolute bottom-4 left-4 right-4 text-white opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
                       <p className="font-semibold">{box.name}</p>
-                      <p className="text-amber-300">₹{box.price}</p>
+                      <p className="text-emerald-300">₹{box.price}</p>
                     </div>
                   </div>
                 </div>

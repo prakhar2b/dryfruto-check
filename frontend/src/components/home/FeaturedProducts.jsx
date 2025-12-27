@@ -37,7 +37,7 @@ const FeaturedProducts = () => {
           </div>
           <Link 
             to="/products" 
-            className="mt-4 md:mt-0 inline-flex items-center gap-2 text-amber-700 hover:text-amber-800 font-semibold transition-colors"
+            className="mt-4 md:mt-0 inline-flex items-center gap-2 text-emerald-700 hover:text-emerald-800 font-semibold transition-colors"
           >
             View All
             <ChevronRight className="w-5 h-5" />
@@ -48,13 +48,13 @@ const FeaturedProducts = () => {
           {/* Scroll Buttons */}
           <button
             onClick={() => scroll('left')}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 bg-white shadow-lg rounded-full flex items-center justify-center text-gray-700 hover:bg-amber-50 transition-colors hidden md:flex"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 bg-white shadow-lg rounded-full flex items-center justify-center text-gray-700 hover:bg-emerald-50 transition-colors hidden md:flex"
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
           <button
             onClick={() => scroll('right')}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-12 h-12 bg-white shadow-lg rounded-full flex items-center justify-center text-gray-700 hover:bg-amber-50 transition-colors hidden md:flex"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-12 h-12 bg-white shadow-lg rounded-full flex items-center justify-center text-gray-700 hover:bg-emerald-50 transition-colors hidden md:flex"
           >
             <ChevronRight className="w-6 h-6" />
           </button>
@@ -71,7 +71,7 @@ const FeaturedProducts = () => {
                 to={`/product/${product.slug}`}
                 className="flex-shrink-0 w-[280px] group"
               >
-                <div className="bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-amber-200 shadow-sm hover:shadow-lg transition-all duration-300">
+                <div className="bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-emerald-200 shadow-sm hover:shadow-lg transition-all duration-300">
                   <div className="relative overflow-hidden aspect-square bg-gray-50">
                     <img
                       src={product.image}
@@ -79,18 +79,18 @@ const FeaturedProducts = () => {
                       className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                      <span className="bg-white text-amber-700 px-4 py-2 rounded-full font-medium flex items-center gap-2">
+                      <span className="bg-white text-emerald-700 px-4 py-2 rounded-full font-medium flex items-center gap-2">
                         <Eye className="w-4 h-4" />
                         View Details
                       </span>
                     </div>
                   </div>
                   <div className="p-4">
-                    <p className="text-sm text-amber-600 mb-1">DryFruto</p>
-                    <h3 className="font-semibold text-gray-800 mb-2 line-clamp-2 group-hover:text-amber-700 transition-colors">
+                    <p className="text-sm text-emerald-600 mb-1">DryFruto</p>
+                    <h3 className="font-semibold text-gray-800 mb-2 line-clamp-2 group-hover:text-emerald-700 transition-colors">
                       {product.name}
                     </h3>
-                    <p className="text-lg font-bold text-amber-700">
+                    <p className="text-lg font-bold text-emerald-700">
                       ₹{product.basePrice}.00
                       <span className="text-sm text-gray-500 font-normal"> /100g</span>
                     </p>
