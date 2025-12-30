@@ -802,6 +802,62 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+@app.on_event("startup")
+async def startup_db_client():
+    """Auto-seed database with default data if empty"""
+    try:
+        # Check if data already exists
+        existing_products = await db.products.count_documents({})
+        if existing_products > 0:
+            logger.info(f"Database already has {existing_products} products, skipping auto-seed")
+            return
+        
+        logger.info("Database is empty, auto-seeding with default data...")
+        
+        # Import mock data
+        try:
+            from seed_data import categories, products, hero_slides, testimonials, gift_boxes, site_settings
+        except ImportError as e:
+            logger.error(f"Failed to import seed_data: {e}")
+            return
+        
+        # Insert categories
+        if categories:
+            await db.categories.insert_many([dict(c) for c in categories])
+            logger.info(f"Seeded {len(categories)} categories")
+        
+        # Insert products
+        if products:
+            await db.products.insert_many([dict(p) for p in products])
+            logger.info(f"Seeded {len(products)} products")
+        
+        # Insert hero slides
+        if hero_slides:
+            await db.hero_slides.insert_many([dict(h) for h in hero_slides])
+            logger.info(f"Seeded {len(hero_slides)} hero slides")
+        
+        # Insert testimonials
+        if testimonials:
+            await db.testimonials.insert_many([dict(t) for t in testimonials])
+            logger.info(f"Seeded {len(testimonials)} testimonials")
+        
+        # Insert gift boxes
+        if gift_boxes:
+            await db.gift_boxes.insert_many([dict(g) for g in gift_boxes])
+            logger.info(f"Seeded {len(gift_boxes)} gift boxes")
+        
+        # Insert site settings
+        await db.site_settings.update_one(
+            {"id": "site_settings"},
+            {"$set": dict(site_settings)},
+            upsert=True
+        )
+        logger.info("Seeded site settings")
+        
+        logger.info("Auto-seed completed successfully!")
+    except Exception as e:
+        logger.error(f"Auto-seed error: {e}")
+
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
