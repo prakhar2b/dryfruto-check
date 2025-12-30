@@ -341,7 +341,7 @@ const SettingsManager = () => {
                   setNewProductType('');
                 }
               }}
-              className="px-4 py-2 bg-[#f5f9f0]0 hover:bg-[#7CB342] text-white rounded-lg flex items-center gap-2"
+              className="px-4 py-2 bg-[#7CB342] hover:bg-[#689F38] text-white rounded-lg flex items-center gap-2"
             >
               <Plus className="w-4 h-4" />
               Add
