@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
-import { LayoutDashboard, Image, Package, Settings, Menu, X, ChevronRight, Home, FileText } from 'lucide-react';
+import { LayoutDashboard, Image, Package, Settings, Menu, X, ChevronRight, Home, FileText, Database } from 'lucide-react';
 
 const AdminLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -11,6 +11,7 @@ const AdminLayout = () => {
     { name: 'Front End', path: '/admin/frontend', icon: Image },
     { name: 'Products', path: '/admin/products', icon: Package },
     { name: 'Submissions', path: '/admin/submissions', icon: FileText },
+    { name: 'Data Manager', path: '/admin/data', icon: Database },
     { name: 'Settings', path: '/admin/settings', icon: Settings },
   ];
 
