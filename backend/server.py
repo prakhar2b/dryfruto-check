@@ -636,6 +636,58 @@ async def update_site_settings(settings: SiteSettingsUpdate):
     updated = await db.site_settings.find_one({"id": "site_settings"}, {"_id": 0})
     return SiteSettings(**updated)
 
+# ----- Seed Data Route -----
+@api_router.post("/seed-data")
+async def seed_data_endpoint():
+    """Reset database with default data"""
+    try:
+        # Clear all collections
+        await db.categories.delete_many({})
+        await db.products.delete_many({})
+        await db.hero_slides.delete_many({})
+        await db.testimonials.delete_many({})
+        await db.gift_boxes.delete_many({})
+        
+        # Get fresh default data
+        categories = get_default_categories()
+        products = get_default_products()
+        hero_slides = get_default_hero_slides()
+        testimonials = get_default_testimonials()
+        gift_boxes = get_default_gift_boxes()
+        
+        # Insert all default data
+        if categories:
+            await db.categories.insert_many(categories)
+        if products:
+            await db.products.insert_many(products)
+        if hero_slides:
+            await db.hero_slides.insert_many(hero_slides)
+        if testimonials:
+            await db.testimonials.insert_many(testimonials)
+        if gift_boxes:
+            await db.gift_boxes.insert_many(gift_boxes)
+        
+        # Reset site settings
+        await db.site_settings.update_one(
+            {"id": "site_settings"},
+            {"$set": DEFAULT_SITE_SETTINGS.copy()},
+            upsert=True
+        )
+        
+        logging.info("Data seeded successfully via API")
+        
+        return {
+            "message": "Data seeded successfully",
+            "categories": len(categories),
+            "products": len(products),
+            "heroSlides": len(hero_slides),
+            "testimonials": len(testimonials),
+            "giftBoxes": len(gift_boxes)
+        }
+    except Exception as e:
+        logging.error(f"Seed data error: {e}")
+        raise HTTPException(status_code=500, detail=f"Error seeding data: {str(e)}")
+
 # ============== FILE UPLOAD ==============
 
 UPLOAD_DIR = ROOT_DIR / "uploads"
