@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Package, Image, Star, Gift, RefreshCw } from 'lucide-react';
+import { Package, Image, Star, Gift } from 'lucide-react';
 import axios from 'axios';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -13,7 +13,6 @@ const Dashboard = () => {
     giftBoxes: 0
   });
   const [loading, setLoading] = useState(true);
-  const [seeding, setSeeding] = useState(false);
 
   useEffect(() => {
     fetchStats();
@@ -38,23 +37,6 @@ const Dashboard = () => {
       console.error('Error fetching stats:', error);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const seedData = async () => {
-    if (!window.confirm('This will reset all data to default values. Are you sure?')) {
-      return;
-    }
-    try {
-      setSeeding(true);
-      const response = await axios.post(`${API}/seed-data`);
-      await fetchStats();
-      alert(`Data seeded successfully!\n\nProducts: ${response.data.products}\nCategories: ${response.data.categories}\nHero Slides: ${response.data.heroSlides}\nTestimonials: ${response.data.testimonials}\nGift Boxes: ${response.data.giftBoxes}`);
-    } catch (error) {
-      console.error('Error seeding data:', error);
-      alert('Error seeding data: ' + (error.response?.data?.detail || error.message));
-    } finally {
-      setSeeding(false);
     }
   };
 
@@ -91,24 +73,14 @@ const Dashboard = () => {
         ))}
       </div>
 
-      {/* Quick Actions */}
+      {/* Info Section */}
       <div className="bg-white rounded-xl shadow-sm p-6">
-        <h2 className="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h2>
-        <div className="flex flex-wrap gap-4">
-          <button
-            onClick={seedData}
-            disabled={seeding}
-            className="flex items-center gap-2 bg-[#7CB342] hover:bg-[#689F38] text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
-          >
-            <RefreshCw className={`w-5 h-5 ${seeding ? 'animate-spin' : ''}`} />
-            {seeding ? 'Seeding...' : 'Seed Initial Data'}
-          </button>
-        </div>
-        <p className="text-gray-500 text-sm mt-4">
-          Click "Seed Initial Data" to reset the database with default products, categories, and other content.
+        <h2 className="text-lg font-semibold text-gray-800 mb-4">Admin Panel</h2>
+        <p className="text-gray-600">
+          Use the sidebar to manage products, categories, testimonials, gift boxes, and site settings.
+          Default data is automatically loaded when the database is empty.
         </p>
       </div>
-
     </div>
   );
 };
