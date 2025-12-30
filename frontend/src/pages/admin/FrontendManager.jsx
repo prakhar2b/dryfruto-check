@@ -1,9 +1,122 @@
-import React, { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, Save, X, Image as ImageIcon } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Plus, Edit2, Trash2, Save, X, Upload, Image as ImageIcon, Loader2 } from 'lucide-react';
 import axios from 'axios';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
+
+// Image Upload Component
+const ImageUpload = ({ value, onChange, label = "Image" }) => {
+  const [uploading, setUploading] = useState(false);
+  const [dragActive, setDragActive] = useState(false);
+  const fileInputRef = useRef(null);
+
+  const handleUpload = async (file) => {
+    if (!file) return;
+    
+    setUploading(true);
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await axios.post(`${API}/upload`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      onChange(`${BACKEND_URL}${response.data.url}`);
+    } catch (error) {
+      console.error('Upload failed:', error);
+      alert('Failed to upload image. Please try again.');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleDrag = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleUpload(e.dataTransfer.files[0]);
+    }
+  };
+
+  return (
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-2">{label}</label>
+      
+      {/* Upload Area */}
+      <div
+        className={`relative border-2 border-dashed rounded-xl p-4 text-center transition-colors ${
+          dragActive ? 'border-[#7CB342] bg-[#f5f9f0]' : 'border-gray-300 hover:border-[#8BC34A]'
+        }`}
+        onDragEnter={handleDrag}
+        onDragLeave={handleDrag}
+        onDragOver={handleDrag}
+        onDrop={handleDrop}
+      >
+        {uploading ? (
+          <div className="py-4">
+            <Loader2 className="w-8 h-8 text-[#7CB342] animate-spin mx-auto mb-2" />
+            <p className="text-sm text-gray-500">Uploading...</p>
+          </div>
+        ) : value ? (
+          <div className="relative">
+            <img src={value} alt="Preview" className="max-h-40 mx-auto rounded-lg object-cover" />
+            <button
+              type="button"
+              onClick={() => onChange('')}
+              className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        ) : (
+          <div className="py-4">
+            <Upload className="w-10 h-10 text-gray-400 mx-auto mb-2" />
+            <p className="text-sm text-gray-600 mb-1">Drag & drop an image here, or</p>
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="text-[#7CB342] font-medium hover:text-[#689F38]"
+            >
+              Browse files
+            </button>
+          </div>
+        )}
+        
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => e.target.files?.[0] && handleUpload(e.target.files[0])}
+        />
+      </div>
+
+      {/* URL Input */}
+      <div className="mt-3">
+        <p className="text-xs text-gray-500 mb-1">Or paste image URL:</p>
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder="https://example.com/image.jpg"
+          className="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-[#8BC34A] outline-none"
+        />
+      </div>
+    </div>
+  );
+};
 
 const FrontendManager = () => {
   const [activeTab, setActiveTab] = useState('hero');
@@ -126,7 +239,7 @@ const FrontendManager = () => {
         </div>
         <button
           onClick={() => { setEditItem(null); setShowModal(true); }}
-          className="flex items-center gap-2 bg-[#f5f9f0]0 hover:bg-[#7CB342] text-white px-4 py-2 rounded-lg transition-colors"
+          className="flex items-center gap-2 bg-[#7CB342] hover:bg-[#689F38] text-white px-4 py-2 rounded-lg transition-colors"
         >
           <Plus className="w-5 h-5" />
           Add New
@@ -142,7 +255,7 @@ const FrontendManager = () => {
               onClick={() => setActiveTab(tab.id)}
               className={`px-6 py-4 font-medium transition-colors ${
                 activeTab === tab.id
-                  ? 'text-[#7CB342] border-b-2 border-[#f5f9f0]0'
+                  ? 'text-[#7CB342] border-b-2 border-[#7CB342]'
                   : 'text-gray-500 hover:text-gray-700'
               }`}
             >
@@ -180,14 +293,14 @@ const HeroSlidesList = ({ data, onEdit, onDelete }) => (
       <p className="text-gray-500 text-center py-8">No hero slides found. Add one to get started.</p>
     ) : (
       data.map((slide) => (
-        <div key={slide.id} className="flex items-center gap-4 p-4 border rounded-lg">
+        <div key={slide.id} className="flex items-center gap-4 p-4 border rounded-lg hover:border-[#C1E899] transition-colors">
           <img src={slide.image} alt={slide.title} className="w-32 h-20 object-cover rounded-lg" />
           <div className="flex-1">
             <h3 className="font-semibold text-gray-800">{slide.title}</h3>
             <p className="text-sm text-gray-500">{slide.subtitle}</p>
           </div>
           <div className="flex gap-2">
-            <button onClick={() => onEdit(slide)} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg">
+            <button onClick={() => onEdit(slide)} className="p-2 text-[#7CB342] hover:bg-[#f5f9f0] rounded-lg">
               <Edit2 className="w-5 h-5" />
             </button>
             <button onClick={() => onDelete(slide.id)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg">
@@ -207,13 +320,13 @@ const CategoriesList = ({ data, onEdit, onDelete }) => (
       <p className="text-gray-500 text-center py-8 col-span-full">No categories found. Add one to get started.</p>
     ) : (
       data.map((cat) => (
-        <div key={cat.id} className="border rounded-lg overflow-hidden">
+        <div key={cat.id} className="border rounded-lg overflow-hidden hover:border-[#C1E899] transition-colors">
           <img src={cat.image} alt={cat.name} className="w-full h-32 object-cover" />
           <div className="p-3">
             <h3 className="font-semibold text-gray-800">{cat.name}</h3>
             <p className="text-sm text-gray-500">{cat.slug}</p>
             <div className="flex gap-2 mt-2">
-              <button onClick={() => onEdit(cat)} className="p-1 text-blue-600 hover:bg-blue-50 rounded">
+              <button onClick={() => onEdit(cat)} className="p-1 text-[#7CB342] hover:bg-[#f5f9f0] rounded">
                 <Edit2 className="w-4 h-4" />
               </button>
               <button onClick={() => onDelete(cat.id)} className="p-1 text-red-600 hover:bg-red-50 rounded">
@@ -234,14 +347,14 @@ const TestimonialsList = ({ data, onEdit, onDelete }) => (
       <p className="text-gray-500 text-center py-8">No testimonials found. Add one to get started.</p>
     ) : (
       data.map((item) => (
-        <div key={item.id} className="flex items-start gap-4 p-4 border rounded-lg">
+        <div key={item.id} className="flex items-start gap-4 p-4 border rounded-lg hover:border-[#C1E899] transition-colors">
           <img src={item.avatar} alt={item.name} className="w-12 h-12 rounded-full object-cover" />
           <div className="flex-1">
             <h3 className="font-semibold text-gray-800">{item.name}</h3>
             <p className="text-sm text-gray-600 mt-1">"{item.review}"</p>
           </div>
           <div className="flex gap-2">
-            <button onClick={() => onEdit(item)} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg">
+            <button onClick={() => onEdit(item)} className="p-2 text-[#7CB342] hover:bg-[#f5f9f0] rounded-lg">
               <Edit2 className="w-5 h-5" />
             </button>
             <button onClick={() => onDelete(item.id)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg">
@@ -261,13 +374,13 @@ const GiftBoxesList = ({ data, onEdit, onDelete }) => (
       <p className="text-gray-500 text-center py-8 col-span-full">No gift boxes found. Add one to get started.</p>
     ) : (
       data.map((box) => (
-        <div key={box.id} className="border rounded-lg overflow-hidden">
+        <div key={box.id} className="border rounded-lg overflow-hidden hover:border-[#C1E899] transition-colors">
           <img src={box.image} alt={box.name} className="w-full h-32 object-cover" />
           <div className="p-3">
             <h3 className="font-semibold text-gray-800">{box.name}</h3>
             <p className="text-[#7CB342] font-bold">₹{box.price}</p>
             <div className="flex gap-2 mt-2">
-              <button onClick={() => onEdit(box)} className="p-1 text-blue-600 hover:bg-blue-50 rounded">
+              <button onClick={() => onEdit(box)} className="p-1 text-[#7CB342] hover:bg-[#f5f9f0] rounded">
                 <Edit2 className="w-4 h-4" />
               </button>
               <button onClick={() => onDelete(box.id)} className="p-1 text-red-600 hover:bg-red-50 rounded">
@@ -281,39 +394,41 @@ const GiftBoxesList = ({ data, onEdit, onDelete }) => (
   </div>
 );
 
-// Forms
+// Forms with Image Upload
 const HeroSlideForm = ({ item, onSave, onClose }) => {
   const [form, setForm] = useState(item || { title: '', subtitle: '', description: '', image: '', cta: 'Shop Now' });
 
   return (
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-bold">{item ? 'Edit Hero Slide' : 'Add Hero Slide'}</h2>
+        <h2 className="text-xl font-bold text-gray-800">{item ? 'Edit Hero Slide' : 'Add Hero Slide'}</h2>
         <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg"><X className="w-5 h-5" /></button>
       </div>
       <div className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
-          <input type="text" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#f5f9f0]0 outline-none" />
+          <input type="text" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#8BC34A] outline-none" />
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Subtitle</label>
-          <input type="text" value={form.subtitle} onChange={(e) => setForm({ ...form, subtitle: e.target.value })} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#f5f9f0]0 outline-none" />
+          <input type="text" value={form.subtitle} onChange={(e) => setForm({ ...form, subtitle: e.target.value })} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#8BC34A] outline-none" />
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-          <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#f5f9f0]0 outline-none" rows="3" />
+          <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#8BC34A] outline-none" rows="3" />
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
-          <input type="text" value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#f5f9f0]0 outline-none" />
-          {form.image && <img src={form.image} alt="Preview" className="mt-2 h-32 object-cover rounded-lg" />}
-        </div>
+        
+        <ImageUpload 
+          value={form.image} 
+          onChange={(url) => setForm({ ...form, image: url })} 
+          label="Hero Image"
+        />
+        
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">CTA Button Text</label>
-          <input type="text" value={form.cta} onChange={(e) => setForm({ ...form, cta: e.target.value })} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#f5f9f0]0 outline-none" />
+          <input type="text" value={form.cta} onChange={(e) => setForm({ ...form, cta: e.target.value })} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#8BC34A] outline-none" />
         </div>
-        <button onClick={() => onSave(form)} className="w-full bg-[#f5f9f0]0 hover:bg-[#7CB342] text-white py-3 rounded-lg font-semibold flex items-center justify-center gap-2">
+        <button onClick={() => onSave(form)} className="w-full bg-[#7CB342] hover:bg-[#689F38] text-white py-3 rounded-lg font-semibold flex items-center justify-center gap-2">
           <Save className="w-5 h-5" /> Save
         </button>
       </div>
@@ -327,28 +442,32 @@ const CategoryForm = ({ item, onSave, onClose }) => {
   return (
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-bold">{item ? 'Edit Category' : 'Add Category'}</h2>
+        <h2 className="text-xl font-bold text-gray-800">{item ? 'Edit Category' : 'Add Category'}</h2>
         <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg"><X className="w-5 h-5" /></button>
       </div>
       <div className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-          <input type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value, slug: e.target.value.toLowerCase().replace(/\s+/g, '-') })} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#f5f9f0]0 outline-none" />
+          <input type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value, slug: e.target.value.toLowerCase().replace(/\s+/g, '-') })} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#8BC34A] outline-none" />
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Slug</label>
-          <input type="text" value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#f5f9f0]0 outline-none" />
+          <input type="text" value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#8BC34A] outline-none" />
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
-          <input type="text" value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#f5f9f0]0 outline-none" />
-          {form.image && <img src={form.image} alt="Preview" className="mt-2 h-32 object-cover rounded-lg" />}
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Icon URL</label>
-          <input type="text" value={form.icon} onChange={(e) => setForm({ ...form, icon: e.target.value })} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#f5f9f0]0 outline-none" />
-        </div>
-        <button onClick={() => onSave(form)} className="w-full bg-[#f5f9f0]0 hover:bg-[#7CB342] text-white py-3 rounded-lg font-semibold flex items-center justify-center gap-2">
+        
+        <ImageUpload 
+          value={form.image} 
+          onChange={(url) => setForm({ ...form, image: url })} 
+          label="Category Image"
+        />
+        
+        <ImageUpload 
+          value={form.icon} 
+          onChange={(url) => setForm({ ...form, icon: url })} 
+          label="Category Icon (optional)"
+        />
+        
+        <button onClick={() => onSave(form)} className="w-full bg-[#7CB342] hover:bg-[#689F38] text-white py-3 rounded-lg font-semibold flex items-center justify-center gap-2">
           <Save className="w-5 h-5" /> Save
         </button>
       </div>
@@ -362,24 +481,26 @@ const TestimonialForm = ({ item, onSave, onClose }) => {
   return (
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-bold">{item ? 'Edit Testimonial' : 'Add Testimonial'}</h2>
+        <h2 className="text-xl font-bold text-gray-800">{item ? 'Edit Testimonial' : 'Add Testimonial'}</h2>
         <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg"><X className="w-5 h-5" /></button>
       </div>
       <div className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Customer Name</label>
-          <input type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#f5f9f0]0 outline-none" />
+          <input type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#8BC34A] outline-none" />
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Review</label>
-          <textarea value={form.review} onChange={(e) => setForm({ ...form, review: e.target.value })} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#f5f9f0]0 outline-none" rows="4" />
+          <textarea value={form.review} onChange={(e) => setForm({ ...form, review: e.target.value })} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#8BC34A] outline-none" rows="4" />
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Avatar URL</label>
-          <input type="text" value={form.avatar} onChange={(e) => setForm({ ...form, avatar: e.target.value })} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#f5f9f0]0 outline-none" />
-          {form.avatar && <img src={form.avatar} alt="Preview" className="mt-2 w-16 h-16 object-cover rounded-full" />}
-        </div>
-        <button onClick={() => onSave(form)} className="w-full bg-[#f5f9f0]0 hover:bg-[#7CB342] text-white py-3 rounded-lg font-semibold flex items-center justify-center gap-2">
+        
+        <ImageUpload 
+          value={form.avatar} 
+          onChange={(url) => setForm({ ...form, avatar: url })} 
+          label="Customer Avatar"
+        />
+        
+        <button onClick={() => onSave(form)} className="w-full bg-[#7CB342] hover:bg-[#689F38] text-white py-3 rounded-lg font-semibold flex items-center justify-center gap-2">
           <Save className="w-5 h-5" /> Save
         </button>
       </div>
@@ -393,24 +514,26 @@ const GiftBoxForm = ({ item, onSave, onClose }) => {
   return (
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-bold">{item ? 'Edit Gift Box' : 'Add Gift Box'}</h2>
+        <h2 className="text-xl font-bold text-gray-800">{item ? 'Edit Gift Box' : 'Add Gift Box'}</h2>
         <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg"><X className="w-5 h-5" /></button>
       </div>
       <div className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-          <input type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#f5f9f0]0 outline-none" />
+          <input type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#8BC34A] outline-none" />
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Price (₹)</label>
-          <input type="number" value={form.price} onChange={(e) => setForm({ ...form, price: parseFloat(e.target.value) })} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#f5f9f0]0 outline-none" />
+          <input type="number" value={form.price} onChange={(e) => setForm({ ...form, price: parseFloat(e.target.value) })} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#8BC34A] outline-none" />
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
-          <input type="text" value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#f5f9f0]0 outline-none" />
-          {form.image && <img src={form.image} alt="Preview" className="mt-2 h-32 object-cover rounded-lg" />}
-        </div>
-        <button onClick={() => onSave(form)} className="w-full bg-[#f5f9f0]0 hover:bg-[#7CB342] text-white py-3 rounded-lg font-semibold flex items-center justify-center gap-2">
+        
+        <ImageUpload 
+          value={form.image} 
+          onChange={(url) => setForm({ ...form, image: url })} 
+          label="Gift Box Image"
+        />
+        
+        <button onClick={() => onSave(form)} className="w-full bg-[#7CB342] hover:bg-[#689F38] text-white py-3 rounded-lg font-semibold flex items-center justify-center gap-2">
           <Save className="w-5 h-5" /> Save
         </button>
       </div>
