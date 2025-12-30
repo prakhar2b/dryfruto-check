@@ -26,14 +26,6 @@ app = FastAPI()
 api_router = APIRouter(prefix="/api")
 
 # ============== MODELS ==============
-    settings = await db.site_settings.find_one({"id": "site_settings"}, {"_id": 0})
-    if not settings:
-        await db.site_settings.insert_one(DEFAULT_SITE_SETTINGS.copy())
-        logging.info("Initialized site settings with defaults")
-        return DEFAULT_SITE_SETTINGS.copy()
-    return settings
-
-# ============== MODELS ==============
 
 # Status Check Models
 class StatusCheck(BaseModel):
