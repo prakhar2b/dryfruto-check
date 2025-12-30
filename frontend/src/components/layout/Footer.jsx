@@ -18,7 +18,7 @@ const Footer = () => {
   ].filter(social => social.link); // Only show links that are configured
 
   return (
-    <footer className="bg-[#4a7a32] text-white" id="contact">
+    <footer className="bg-[#689F38] text-white" id="contact">
       {/* Main Footer */}
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -28,14 +28,14 @@ const Footer = () => {
               <img 
                 src={LOGO_URL} 
                 alt={siteSettings.businessName} 
-                className="h-16 w-16 rounded-full object-cover border-2 border-[#C1E899]"
+                className="h-16 w-16 rounded-full object-cover border-2 border-white"
               />
               <div>
                 <h2 className="text-xl font-bold">{siteSettings.businessName}</h2>
                 <p className="text-[#C1E899] italic text-sm">{siteSettings.slogan}</p>
               </div>
             </Link>
-            <p className="text-[#d4e8c2] text-sm leading-relaxed mb-4">
+            <p className="text-[#e8f5e0] text-sm leading-relaxed mb-4">
               Premium quality dry fruits, nuts, and seeds delivered to your doorstep. 
               We ensure freshness and quality in every pack.
             </p>
@@ -47,7 +47,7 @@ const Footer = () => {
                     href={social.link} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="w-10 h-10 bg-[#5a8f3e] hover:bg-[#6ba34a] rounded-full flex items-center justify-center transition-colors"
+                    className="w-10 h-10 bg-[#7CB342] hover:bg-[#8BC34A] rounded-full flex items-center justify-center transition-colors"
                     aria-label={social.label}
                   >
                     <social.icon className="w-5 h-5" />
@@ -62,19 +62,19 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-4 text-[#C1E899]">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/" className="text-[#d4e8c2] hover:text-white transition-colors text-sm">Home</Link>
+                <Link to="/" className="text-[#e8f5e0] hover:text-white transition-colors text-sm">Home</Link>
               </li>
               <li>
-                <Link to="/bulk-order" className="text-[#d4e8c2] hover:text-white transition-colors text-sm">Bulk Order</Link>
+                <Link to="/bulk-order" className="text-[#e8f5e0] hover:text-white transition-colors text-sm">Bulk Order</Link>
               </li>
               <li>
-                <Link to="/career" className="text-[#d4e8c2] hover:text-white transition-colors text-sm">Career</Link>
+                <Link to="/career" className="text-[#e8f5e0] hover:text-white transition-colors text-sm">Career</Link>
               </li>
               <li>
-                <Link to="/about" className="text-[#d4e8c2] hover:text-white transition-colors text-sm">About Us</Link>
+                <Link to="/about" className="text-[#e8f5e0] hover:text-white transition-colors text-sm">About Us</Link>
               </li>
               <li>
-                <a href="#contact" className="text-[#d4e8c2] hover:text-white transition-colors text-sm">Contact Us</a>
+                <a href="#contact" className="text-[#e8f5e0] hover:text-white transition-colors text-sm">Contact Us</a>
               </li>
             </ul>
           </div>
@@ -87,7 +87,7 @@ const Footer = () => {
                 <li key={cat.id}>
                   <Link 
                     to={`/products?category=${cat.slug}`} 
-                    className="text-[#d4e8c2] hover:text-white transition-colors text-sm"
+                    className="text-[#e8f5e0] hover:text-white transition-colors text-sm"
                   >
                     {cat.name}
                   </Link>
@@ -103,7 +103,7 @@ const Footer = () => {
               <li className="flex items-start gap-3">
                 <Phone className="w-5 h-5 text-[#C1E899] mt-0.5" />
                 <div>
-                  <p className="text-sm text-[#a8d48a]">Call us</p>
+                  <p className="text-sm text-[#C1E899]">Call us</p>
                   <a href={callLink} className="text-white hover:text-[#C1E899] transition-colors">
                     +91 {siteSettings.phone}
                   </a>
@@ -112,7 +112,7 @@ const Footer = () => {
               <li className="flex items-start gap-3">
                 <Mail className="w-5 h-5 text-[#C1E899] mt-0.5" />
                 <div>
-                  <p className="text-sm text-[#a8d48a]">Email us</p>
+                  <p className="text-sm text-[#C1E899]">Email us</p>
                   <a href={`mailto:${siteSettings.email}`} className="text-white hover:text-[#C1E899] transition-colors">
                     {siteSettings.email}
                   </a>
@@ -121,7 +121,7 @@ const Footer = () => {
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-[#C1E899] mt-0.5" />
                 <div>
-                  <p className="text-sm text-[#a8d48a]">Visit us</p>
+                  <p className="text-sm text-[#C1E899]">Visit us</p>
                   <p className="text-white text-sm">{siteSettings.address}</p>
                 </div>
               </li>
@@ -131,19 +131,19 @@ const Footer = () => {
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-[#5a8f3e]">
+      <div className="border-t border-[#7CB342]">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-[#a8d48a] text-sm">
+            <p className="text-[#C1E899] text-sm">
               © 2025 {siteSettings.businessName}. All rights reserved.
             </p>
-            <p className="text-[#a8d48a] text-sm">
+            <p className="text-[#C1E899] text-sm">
               Designed and hosted by{' '}
               <a 
                 href="https://statell.com" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="text-[#C1E899] hover:text-white transition-colors"
+                className="text-white hover:text-[#C1E899] transition-colors"
               >
                 Statell Marketing
               </a>
