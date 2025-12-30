@@ -606,6 +606,225 @@ async def seed_data_endpoint():
         logging.error(f"Seed data error: {e}")
         raise HTTPException(status_code=500, detail=f"Error seeding data: {str(e)}")
 
+# ============== DATA MANAGEMENT ==============
+
+# Pydantic models for data management
+class DataChangeRecord(BaseModel):
+    id: str
+    timestamp: str
+    action: str  # 'import', 'export', 'seed'
+    filename: Optional[str] = None
+    summary: Dict[str, Any]
+    details: Optional[str] = None
+
+class DataExport(BaseModel):
+    exportDate: str
+    version: str
+    categories: List[Dict[str, Any]]
+    products: List[Dict[str, Any]]
+    heroSlides: List[Dict[str, Any]]
+    testimonials: List[Dict[str, Any]]
+    giftBoxes: List[Dict[str, Any]]
+    siteSettings: Dict[str, Any]
+
+@api_router.get("/export-data")
+async def export_data():
+    """Export all data to JSON format"""
+    try:
+        # Fetch all data
+        categories = await db.categories.find({}, {"_id": 0}).to_list(1000)
+        products = await db.products.find({}, {"_id": 0}).to_list(1000)
+        hero_slides = await db.hero_slides.find({}, {"_id": 0}).to_list(100)
+        testimonials = await db.testimonials.find({}, {"_id": 0}).to_list(100)
+        gift_boxes = await db.gift_boxes.find({}, {"_id": 0}).to_list(100)
+        site_settings = await db.site_settings.find_one({"id": "site_settings"}, {"_id": 0})
+        
+        export_data = {
+            "exportDate": datetime.now(timezone.utc).isoformat(),
+            "version": "1.0",
+            "categories": categories,
+            "products": products,
+            "heroSlides": hero_slides,
+            "testimonials": testimonials,
+            "giftBoxes": gift_boxes,
+            "siteSettings": site_settings or {}
+        }
+        
+        # Log the export
+        await db.data_changes.insert_one({
+            "id": str(uuid.uuid4()),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "action": "export",
+            "filename": f"dryfruto_export_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
+            "summary": {
+                "categories": len(categories),
+                "products": len(products),
+                "heroSlides": len(hero_slides),
+                "testimonials": len(testimonials),
+                "giftBoxes": len(gift_boxes)
+            },
+            "details": "Data exported successfully"
+        })
+        
+        return export_data
+    except Exception as e:
+        logging.error(f"Export data error: {e}")
+        raise HTTPException(status_code=500, detail=f"Error exporting data: {str(e)}")
+
+@api_router.post("/import-data")
+async def import_data(file: UploadFile = File(...)):
+    """Import data from JSON file"""
+    try:
+        # Read and parse the file
+        content = await file.read()
+        data = json.loads(content.decode('utf-8'))
+        
+        # Validate required fields
+        required_fields = ['categories', 'products']
+        for field in required_fields:
+            if field not in data:
+                raise HTTPException(status_code=400, detail=f"Missing required field: {field}")
+        
+        # Track changes
+        changes = {
+            "categories": {"added": 0, "updated": 0},
+            "products": {"added": 0, "updated": 0},
+            "heroSlides": {"added": 0, "updated": 0},
+            "testimonials": {"added": 0, "updated": 0},
+            "giftBoxes": {"added": 0, "updated": 0},
+            "siteSettings": {"updated": False}
+        }
+        
+        # Import Categories
+        if 'categories' in data and data['categories']:
+            for cat in data['categories']:
+                if 'id' not in cat:
+                    cat['id'] = str(uuid.uuid4())
+                existing = await db.categories.find_one({"id": cat['id']})
+                if existing:
+                    await db.categories.update_one({"id": cat['id']}, {"$set": cat})
+                    changes['categories']['updated'] += 1
+                else:
+                    await db.categories.insert_one(cat)
+                    changes['categories']['added'] += 1
+        
+        # Import Products
+        if 'products' in data and data['products']:
+            for prod in data['products']:
+                if 'id' not in prod:
+                    prod['id'] = str(uuid.uuid4())
+                existing = await db.products.find_one({"id": prod['id']})
+                if existing:
+                    await db.products.update_one({"id": prod['id']}, {"$set": prod})
+                    changes['products']['updated'] += 1
+                else:
+                    await db.products.insert_one(prod)
+                    changes['products']['added'] += 1
+        
+        # Import Hero Slides
+        if 'heroSlides' in data and data['heroSlides']:
+            for slide in data['heroSlides']:
+                if 'id' not in slide:
+                    slide['id'] = str(uuid.uuid4())
+                existing = await db.hero_slides.find_one({"id": slide['id']})
+                if existing:
+                    await db.hero_slides.update_one({"id": slide['id']}, {"$set": slide})
+                    changes['heroSlides']['updated'] += 1
+                else:
+                    await db.hero_slides.insert_one(slide)
+                    changes['heroSlides']['added'] += 1
+        
+        # Import Testimonials
+        if 'testimonials' in data and data['testimonials']:
+            for test in data['testimonials']:
+                if 'id' not in test:
+                    test['id'] = str(uuid.uuid4())
+                existing = await db.testimonials.find_one({"id": test['id']})
+                if existing:
+                    await db.testimonials.update_one({"id": test['id']}, {"$set": test})
+                    changes['testimonials']['updated'] += 1
+                else:
+                    await db.testimonials.insert_one(test)
+                    changes['testimonials']['added'] += 1
+        
+        # Import Gift Boxes
+        if 'giftBoxes' in data and data['giftBoxes']:
+            for gift in data['giftBoxes']:
+                if 'id' not in gift:
+                    gift['id'] = str(uuid.uuid4())
+                existing = await db.gift_boxes.find_one({"id": gift['id']})
+                if existing:
+                    await db.gift_boxes.update_one({"id": gift['id']}, {"$set": gift})
+                    changes['giftBoxes']['updated'] += 1
+                else:
+                    await db.gift_boxes.insert_one(gift)
+                    changes['giftBoxes']['added'] += 1
+        
+        # Import Site Settings
+        if 'siteSettings' in data and data['siteSettings']:
+            await db.site_settings.update_one(
+                {"id": "site_settings"},
+                {"$set": data['siteSettings']},
+                upsert=True
+            )
+            changes['siteSettings']['updated'] = True
+        
+        # Log the import
+        await db.data_changes.insert_one({
+            "id": str(uuid.uuid4()),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "action": "import",
+            "filename": file.filename,
+            "summary": changes,
+            "details": f"Imported from {file.filename}"
+        })
+        
+        logging.info(f"Data imported successfully from {file.filename}")
+        
+        return {
+            "message": "Data imported successfully",
+            "changes": changes
+        }
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=400, detail="Invalid JSON file")
+    except Exception as e:
+        logging.error(f"Import data error: {e}")
+        raise HTTPException(status_code=500, detail=f"Error importing data: {str(e)}")
+
+@api_router.get("/data-history")
+async def get_data_history():
+    """Get data change history"""
+    try:
+        history = await db.data_changes.find({}, {"_id": 0}).sort("timestamp", -1).to_list(100)
+        return history
+    except Exception as e:
+        logging.error(f"Get data history error: {e}")
+        raise HTTPException(status_code=500, detail=f"Error fetching data history: {str(e)}")
+
+@api_router.delete("/data-history/{record_id}")
+async def delete_history_record(record_id: str):
+    """Delete a specific history record"""
+    try:
+        result = await db.data_changes.delete_one({"id": record_id})
+        if result.deleted_count == 0:
+            raise HTTPException(status_code=404, detail="Record not found")
+        return {"message": "Record deleted successfully"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        logging.error(f"Delete history record error: {e}")
+        raise HTTPException(status_code=500, detail=f"Error deleting record: {str(e)}")
+
+@api_router.delete("/data-history")
+async def clear_data_history():
+    """Clear all data change history"""
+    try:
+        result = await db.data_changes.delete_many({})
+        return {"message": f"Deleted {result.deleted_count} records"}
+    except Exception as e:
+        logging.error(f"Clear data history error: {e}")
+        raise HTTPException(status_code=500, detail=f"Error clearing history: {str(e)}")
+
 # ============== FILE UPLOAD ==============
 
 UPLOAD_DIR = ROOT_DIR / "uploads"
