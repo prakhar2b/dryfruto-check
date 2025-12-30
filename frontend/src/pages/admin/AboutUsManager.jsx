@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Save, Plus, X, Image, Type, List, Target, Eye, Heart, Award } from 'lucide-react';
 import axios from 'axios';
 import ImageUpload from '../../components/common/ImageUpload';
+import { API_BASE_URL } from '../../config/api';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+const API = API_BASE_URL;
 
 const AboutUsManager = () => {
   const [settings, setSettings] = useState({
