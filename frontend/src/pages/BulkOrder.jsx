@@ -4,9 +4,9 @@ import { useData } from '../context/DataContext';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
 import axios from 'axios';
+import { API_BASE_URL } from '../config/api';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+const API = API_BASE_URL;
 
 const BulkOrder = () => {
   const { siteSettings } = useData();
