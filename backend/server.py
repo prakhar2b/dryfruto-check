@@ -26,38 +26,6 @@ app = FastAPI()
 api_router = APIRouter(prefix="/api")
 
 # ============== MODELS ==============
-        {"id": "test-1", "name": "Priya Sharma", "review": "Excellent quality dry fruits! The almonds and cashews are always fresh and delicious.", "avatar": "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=100"},
-        {"id": "test-2", "name": "Rajesh Kumar", "review": "Best place for premium dry fruits. Excellent packaging and timely delivery!", "avatar": "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=100"},
-        {"id": "test-3", "name": "Anita Patel", "review": "The gift boxes are perfect for occasions. Everyone loved them!", "avatar": "https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=100"},
-        {"id": "test-4", "name": "Mohammed Ali", "review": "Fresh and premium quality nuts. The Makhana is crispy and tasty!", "avatar": "https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=100"},
-        {"id": "test-5", "name": "Sunita Verma", "review": "Amazing customer service and product quality. The dates are the best!", "avatar": "https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=100"},
-        {"id": "test-6", "name": "Vikram Singh", "review": "Top-notch quality with amazing flavor. Perfect for daily snacking!", "avatar": "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=100"}
-    ]
-
-# Default Gift Boxes with fixed IDs
-def get_default_gift_boxes():
-    return [
-        {"id": "gift-1", "name": "Premium Gift Hamper", "image": "https://images.pexels.com/photos/5945770/pexels-photo-5945770.jpeg?auto=compress&cs=tinysrgb&w=500", "price": 1499},
-        {"id": "gift-2", "name": "Festive Delight Box", "image": "https://images.pexels.com/photos/4033324/pexels-photo-4033324.jpeg?auto=compress&cs=tinysrgb&w=500", "price": 1999},
-        {"id": "gift-3", "name": "Corporate Gift Set", "image": "https://images.pexels.com/photos/264892/pexels-photo-264892.jpeg?auto=compress&cs=tinysrgb&w=500", "price": 2499},
-        {"id": "gift-4", "name": "Royal Collection Box", "image": "https://images.pexels.com/photos/1028714/pexels-photo-1028714.jpeg?auto=compress&cs=tinysrgb&w=500", "price": 3499},
-        {"id": "gift-5", "name": "Anniversary Special", "image": "https://images.pexels.com/photos/5945759/pexels-photo-5945759.jpeg?auto=compress&cs=tinysrgb&w=500", "price": 2999},
-        {"id": "gift-6", "name": "Diwali Gift Box", "image": "https://images.pexels.com/photos/4033321/pexels-photo-4033321.jpeg?auto=compress&cs=tinysrgb&w=500", "price": 1799}
-    ]
-
-# Helper function to initialize collection with default data
-async def ensure_collection_data(collection_name: str, get_defaults_func):
-    """Check if collection is empty and populate with defaults if needed"""
-    count = await db[collection_name].count_documents({})
-    if count == 0:
-        defaults = get_defaults_func()
-        if defaults:
-            await db[collection_name].insert_many(defaults)
-            logging.info(f"Initialized {collection_name} with {len(defaults)} default items")
-    return await db[collection_name].find({}, {"_id": 0}).to_list(1000)
-
-async def ensure_site_settings():
-    """Ensure site settings exist"""
     settings = await db.site_settings.find_one({"id": "site_settings"}, {"_id": 0})
     if not settings:
         await db.site_settings.insert_one(DEFAULT_SITE_SETTINGS.copy())
