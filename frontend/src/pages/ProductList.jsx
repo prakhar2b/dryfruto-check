@@ -84,9 +84,9 @@ const ProductList = () => {
       
       <main>
         {/* Breadcrumb */}
-        <div className="bg-gradient-to-r from-emerald-800 to-emerald-900 py-8">
+        <div className="bg-gradient-to-r from-[#558B2F] to-[#689F38] py-8">
           <div className="max-w-7xl mx-auto px-4">
-            <div className="flex items-center gap-2 text-emerald-200 text-sm mb-2">
+            <div className="flex items-center gap-2 text-[#C1E899] text-sm mb-2">
               <Link to="/" className="hover:text-white transition-colors">Home</Link>
               <ChevronRight className="w-4 h-4" />
               <span className="text-white">
@@ -134,7 +134,7 @@ const ProductList = () => {
                 {/* Categories */}
                 <div className="bg-white rounded-xl p-5 shadow-sm mb-6">
                   <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                    <Filter className="w-5 h-5 text-emerald-600" />
+                    <Filter className="w-5 h-5 text-[#8BC34A]" />
                     Categories
                   </h3>
                   <ul className="space-y-2">
@@ -142,7 +142,7 @@ const ProductList = () => {
                       <Link
                         to="/products"
                         className={`block py-2 px-3 rounded-lg transition-colors ${
-                          !categorySlug ? 'bg-emerald-100 text-emerald-800 font-medium' : 'text-gray-600 hover:bg-gray-100'
+                          !categorySlug ? 'bg-[#e8f5e0] text-[#558B2F] font-medium' : 'text-gray-600 hover:bg-gray-100'
                         }`}
                       >
                         All Products
@@ -153,7 +153,7 @@ const ProductList = () => {
                         <Link
                           to={`/products?category=${cat.slug}`}
                           className={`block py-2 px-3 rounded-lg transition-colors ${
-                            categorySlug === cat.slug ? 'bg-emerald-100 text-emerald-800 font-medium' : 'text-gray-600 hover:bg-gray-100'
+                            categorySlug === cat.slug ? 'bg-[#e8f5e0] text-[#558B2F] font-medium' : 'text-gray-600 hover:bg-gray-100'
                           }`}
                         >
                           {cat.name}
@@ -169,7 +169,7 @@ const ProductList = () => {
                   <select
                     value={selectedType}
                     onChange={(e) => setSelectedType(e.target.value)}
-                    className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 outline-none"
+                    className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#8BC34A] focus:border-[#8BC34A] outline-none"
                   >
                     <option value="">All Types</option>
                     {productTypes.map((type) => (
@@ -184,7 +184,7 @@ const ProductList = () => {
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 outline-none"
+                    className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#8BC34A] focus:border-[#8BC34A] outline-none"
                   >
                     <option value="default">Default</option>
                     <option value="price-low">Price: Low to High</option>
@@ -213,8 +213,8 @@ const ProductList = () => {
                 </div>
               ) : (
                 <div className="bg-white rounded-xl p-12 text-center">
-                  <p className="text-gray-500 text-lg">No products found matching your criteria.</p>
-                  <Link to="/products" className="text-emerald-600 hover:text-emerald-700 font-medium mt-2 inline-block">
+216|                  <p className="text-gray-500 text-lg">No products found matching your criteria.</p>
+                  <Link to="/products" className="text-[#8BC34A] hover:text-[#689F38] font-medium mt-2 inline-block">
                     View all products
                   </Link>
                 </div>
