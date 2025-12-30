@@ -13,9 +13,9 @@ services:
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/dryfruto --quiet
       interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
 
   # Backend API (Auto-seeds data on first startup)
   backend:
@@ -38,10 +38,10 @@ services:
       test: curl -f http://localhost:8001/api/health || exit 1
       interval: 30s
       timeout: 10s
-      retries: 3
-      start_period: 15s
+      retries: 5
+      start_period: 30s
 
-  # Frontend (React with Yarn)
+  # Frontend (React with Node v14)
   frontend:
     build:
       context: ./frontend
