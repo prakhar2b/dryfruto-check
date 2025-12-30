@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Save, Phone, Mail, MapPin, Facebook, Instagram, Twitter, Youtube, MessageCircle, Briefcase, Package, Plus, X } from 'lucide-react';
+import { Save, Phone, Mail, Facebook, Instagram, Twitter, Youtube, MessageCircle, Briefcase, Package, Plus, X } from 'lucide-react';
 import axios from 'axios';
 import ImageUpload from '../../components/common/ImageUpload';
 
@@ -14,7 +14,6 @@ const SettingsManager = () => {
     phone: '9870990795',
     email: 'info@dryfruto.com',
     careerEmail: 'careers@dryfruto.com',
-    address: '123, Main Street, New Delhi, India',
     whatsappLink: 'https://wa.me/919870990795',
     facebookLink: '',
     instagramLink: '',
