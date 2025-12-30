@@ -82,39 +82,9 @@ http {
             add_header Cache-Control "public";
         }
     }
-
-    # HTTPS Server (uncomment after SSL setup)
-    # server {
-    #     listen 443 ssl http2;
-    #     listen [::]:443 ssl http2;
-    #     server_name statellmarketing.com www.statellmarketing.com;
-    #
-    #     ssl_certificate /etc/letsencrypt/live/statellmarketing.com/fullchain.pem;
-    #     ssl_certificate_key /etc/letsencrypt/live/statellmarketing.com/privkey.pem;
-    #     ssl_protocols TLSv1.2 TLSv1.3;
-    #
-    #     location / {
-    #         proxy_pass http://frontend;
-    #         proxy_http_version 1.1;
-    #         proxy_set_header Host $host;
-    #         proxy_set_header X-Real-IP $remote_addr;
-    #         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    #         proxy_set_header X-Forwarded-Proto $scheme;
-    #     }
-    #
-    #     location /api/ {
-    #         proxy_pass http://backend/api/;
-    #         proxy_set_header Host $host;
-    #         proxy_set_header X-Real-IP $remote_addr;
-    #     }
-    #
-    #     location /uploads/ {
-    #         proxy_pass http://backend/uploads/;
-    #     }
-    # }
 }
 EOF
 
-EXPOSE 80 443
+EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
