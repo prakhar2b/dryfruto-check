@@ -50,8 +50,8 @@ services:
     container_name: sm2024proxy01
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
+      - "9001:80"
+      - "9443:443"
     volumes:
       - ./certbot/conf:/etc/letsencrypt:ro
       - ./certbot/www:/var/www/certbot:ro
