@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Save, Phone, Mail, Facebook, Instagram, Twitter, Youtube, MessageCircle, Briefcase, Package, Plus, X, CheckCircle } from 'lucide-react';
 import axios from 'axios';
 import ImageUpload from '../../components/common/ImageUpload';
+import { API_BASE_URL } from '../../config/api';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+const API = API_BASE_URL;
 
 const SettingsManager = () => {
   const [settings, setSettings] = useState({
