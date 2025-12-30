@@ -549,15 +549,21 @@ async def update_site_settings(settings: SiteSettingsUpdate):
 
 # ----- Seed Data Route -----
 @api_router.post("/seed-data")
-async def seed_data():
+async def seed_data_endpoint():
     """Seed/Reset database with default data"""
     try:
-        # Import mock data
-        try:
-            from seed_data import categories, products, hero_slides, testimonials, gift_boxes, site_settings
-        except ImportError as e:
-            logging.error(f"Failed to import seed_data: {e}")
-            raise HTTPException(status_code=500, detail=f"Failed to import seed_data module: {str(e)}")
+        # Import the do_seed_data function (defined later in the file)
+        # We need to use inline import logic here
+        import sys
+        import os
+        
+        # Ensure the backend directory is in the path
+        backend_dir = os.path.dirname(os.path.abspath(__file__))
+        if backend_dir not in sys.path:
+            sys.path.insert(0, backend_dir)
+        
+        # Import seed_data
+        from seed_data import categories, products, hero_slides, testimonials, gift_boxes, site_settings
         
         # Clear existing data from all collections
         await db.categories.delete_many({})
@@ -603,8 +609,9 @@ async def seed_data():
             "testimonials": len(testimonials),
             "giftBoxes": len(gift_boxes)
         }
-    except HTTPException:
-        raise
+    except ImportError as e:
+        logging.error(f"Failed to import seed_data: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to import seed_data module: {str(e)}")
     except Exception as e:
         logging.error(f"Seed data error: {e}")
         raise HTTPException(status_code=500, detail=f"Error seeding data: {str(e)}")
