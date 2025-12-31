@@ -64,8 +64,8 @@ services:
     container_name: dryfruto_proxy
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
+      - "8011:80"
+      - "8143:443"
     environment:
       - DOMAIN=${DOMAIN:-localhost}
       - SSL_EMAIL=${SSL_EMAIL:-admin@example.com}
